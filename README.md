@@ -1,5 +1,5 @@
 # foundry.nix
-Nix overlay for [foundry-rs/foundry](https://github.com/foundry-rs/foundry/) (including `forge`, `cast` and `anvil`)
+Nix overlay for [foundry-rs/foundry](https://github.com/foundry-rs/foundry/) (including `forge`, `cast`, `anvil` and `chisel`)
 
 This repository is [auto-updated daily](https://github.com/shazow/foundry.nix/blob/main/.github/workflows/update-foundry-bin.yml) with the latest nightly binary release, which are pruned from upstream regularly. We also maintain a `monthly` branch for permanent releases that are not pruned.
 
@@ -73,9 +73,40 @@ Make a `flake.nix` in your solidity project directory:
 }
 ```
 
-Then run `nix develop` to enter a shell with foundry binaries (`forge`, `cast` and `anvil`) present.
+Then run `nix develop` to enter a shell with foundry binaries (`forge`, `cast`, `anvil` and `chisel`) present.
 
 Running `nix flake update` will repin to the latest foundry release from this repo (auto-updates daily).
+
+## Usage: [devenv](https://devenv.sh/)
+
+Initialize devenv in your solidity project directory:
+
+```shell
+$ devenv init
+```
+
+Add this repo as an input in the `devenv.yaml` with the following shell command:
+
+```shell
+$ devenv inputs add foundry github:shazow/foundry.nix --follows nixpkgs
+```
+
+And edit the `devenv.nix`:
+
+```nix
+{ ... }:
+
+{
+  languages.solidity.enable = true;
+  languages.solidity.foundry.enable = true;
+}
+```
+
+Then run `devenv shell` to enter a shell with foundry binaries present.
+
+Running `devenv update` will repin to the latest foundry release from this repo.
+
+You can run `direnv allow` to automatically enter a shell with foundry binaries everytime you cd to this directory, if you have [direnv](https://github.com/nix-community/nix-direnv) installed.
 
 ## NixOS Caveat
 
